@@ -5,6 +5,9 @@
 *.tmproj
 tmtags
 
+## IDE
+.idea
+
 ## EMACS
 *~
 \#*
