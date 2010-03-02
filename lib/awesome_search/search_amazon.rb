@@ -1,4 +1,4 @@
-class SearchEbay < SuperSearch
+class SearchAmazon < SuperSearch
   def get_results
     return nil unless super
     nil

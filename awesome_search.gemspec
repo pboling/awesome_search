@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "awesome_search.gemspec",
      "init.rb",
      "lib/awesome_search.rb",
      "lib/awesome_search/search_amazon.rb",

@@ -1,6 +1,106 @@
-= awesome_search
+= Awesome Search
 
-Description goes here.
+* A helpful library to make searching more organized in the controller and views.
+* Using this library will force you to write a class for each kind of search you want to use.
+
+== Usage
+
+See tests.
+
+  AwesomeSearch.results_for_type_and_locale(":local :text this is a test", ":upc", ":ebay")
+
+== Configuration
+
+These are the defaults, and may be configured separately for each search class you create.
+
+  AwesomeSearch.configure_search_locales do |config|
+    config[:search_locales_to_classes] =
+      { ":local" =>   "SearchLocal",
+        ":amazon" =>  "SearchAmazon",
+        ":google" =>  "SearchGoogle",
+        ":ebay" =>    "SearchEbay" },
+    config[:search_locales_to_locale_modifiers] =
+      {
+        ":local" =>
+          [ ":local" ],
+        ":amazon" =>
+          [ ":amazon",
+            ":amzn",
+            ":amz",
+            ":am"],
+        ":google" =>
+          [ ":google",
+            ":goog",
+            ":goo",
+            ":go"],
+        ":ebay" =>
+          [ ":ebay",
+            ":eby",
+            ":eb"]
+      },
+    config[:locale_modifiers_to_search_locales] =
+      {
+        ":local"  => ":local",
+        ":amazon" => ":amazon",
+        ":amz"    => ":amazon",
+        ":amzn"   => ":amazon",
+        ":am"     => ":amazon",
+        ":google" => ":google",
+        ":goog"   => ":google",
+        ":goo"    => ":google",
+        ":go"     => ":google",
+        ":ebay"   => ":ebay",
+        ":eby"    => ":ebay",
+        ":eb"     => ":ebay"
+      }
+  end
+
+  AwesomeSearch.configure_search_types do |config|
+    config[:search_types_to_type_modifiers] =
+      {
+        ":isbn" => ":isbn",
+        ":sku" => ":sku",
+        ":upc" => ":upc",
+        ":asin" => ":asin",
+        ":id" => ":dbid",
+        ":text" => ":text"
+      },
+      # When using observer, how long should we wait before sending out search queries?
+    config[:search_type_inceptions] =
+      {
+        ":isbn" => 10,
+        ":sku" => 8,
+        ":upc" => 10,
+        ":asin" => 10,
+        ":id" => 1,
+        ":text" => 4
+      },
+    config[:search_type_regexes] =
+      {
+        ":isbn" => /\d{10}$|^\d{13}/,            #match 10 or 13 digits for isbn
+        ":sku" => /[0-9a-zA-Z\-]+/,              #match any alphanumeric
+        ":upc" => /\d{10}$|^\d{12}/,
+        ":asin" => /\w{10}/,
+        ":id" => /\d+/,
+        ":text" => /\w{4}/
+      }
+  end
+
+  Create subclasses like this:
+
+  #1. inherit from SuperSearch (which inherits from AwesomeSearch)
+  class SearchAmazon < SuperSearch
+  #2. Define a method called get_results
+    def get_results
+  #3. always return nil unless super, as super's get_results will ensure the search is valid
+      return nil unless super
+  #4. Here is where you would do actual searching.  Write other methods and call them if need be or call methods in other classes, etc.
+  # You need to set the variable that will contain the search results, results. results is set to [] in the super, so you can iterate and do << with it.
+      self.results = Model.find(stuff) if stuff
+      nil
+    end
+  end
+
 
 == Note on Patches/Pull Requests
  
@@ -14,4 +114,4 @@ Description goes here.
 
 == Copyright
 
-Copyright (c) 2010 pboling. See LICENSE for details.
+  Copyright (c) 2008-9 Peter H. Boling, released under the MIT license. See LICENSE for details.

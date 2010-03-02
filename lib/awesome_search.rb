@@ -134,6 +134,7 @@ class AwesomeSearch
     puts "search type inception is invalid (no type regex matches query string)" if self.verbose && !new_search.valid_search_type_inception?
     return nil unless new_search.valid_search_type_inception?
     new_search.get_results
+    new_search.count = new_search.results.length
     return new_search
   end
 
