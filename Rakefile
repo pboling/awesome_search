@@ -5,12 +5,13 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "awesome_search"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Organize complicated search results}
+    gem.description = %Q{Organize complicated search results}
     gem.email = "peter.boling@peterboling.com"
     gem.homepage = "http://github.com/pboling/awesome_search"
     gem.authors = ["pboling"]
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_development_dependency "shoulda", ">= 0"
+    gem.add_runtime_dependency "activesupport", ">= 2.1"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
