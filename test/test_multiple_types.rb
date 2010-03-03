@@ -16,8 +16,8 @@ class TestMultipleTypes < Test::Unit::TestCase
     should "all have results" do
       assert @searches.select {|x| x.found.is_a?(Array)}.length == 2
     end
-    should "all have count" do
-      assert @searches.select {|x| x.count.is_a?(Integer)}.length == 2
+    should "all have tally" do
+      assert @searches.select {|x| x.tally.is_a?(Integer)}.length == 2
     end
   end
 
@@ -35,8 +35,8 @@ class TestMultipleTypes < Test::Unit::TestCase
     should "all have results" do
       assert @searches.select {|x| x.found.is_a?(Array)}.length == 1
     end
-    should "all have count" do
-      assert @searches.select {|x| x.count.is_a?(Integer)}.length == 1
+    should "all have tally" do
+      assert @searches.select {|x| x.tally.is_a?(Integer)}.length == 1
     end
   end
 end

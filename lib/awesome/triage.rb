@@ -21,7 +21,8 @@ module Awesome
                    :types,
                    :locales,
                    :filters,
-                   :multiple_types_as_one )
+                   :multiple_types_as_one,
+                   :redirect_url )
 
     def initialize(*args)
       super()
@@ -30,6 +31,7 @@ module Awesome
       @locales  = args.first[:locales].respond_to?(:each) ? args.first[:locales] : [args.first[:locales]] # a symring, or array thereof (symring methods are in the Bits mixin)
       @filters  = args.first[:filters] # a ruby object (string, array, hash) to be used by subclasss search classes as a filter
       @multiple_types_as_one = args.first[:multiple_types_as_one] || false# Boolean: should the array of types be sent through to a single search, or iterated over to separate searches like locales?
+      @redirect_url = nil
       # 1. Handle all locale modifiers, by creating a different search for each
       self.locales.each do |locale|
         puts "initializing locale: #{locale}" if self.class.verbose_locales
@@ -42,17 +44,27 @@ module Awesome
         locale_mods = self.class.valid_locale_modifiers(self.text, locale)
         puts "locale_mods is empty" if Awesome::Triage.verbose && locale_mods.empty?
         next if locale_mods.empty?
-        # 4. Handle all type modifiers, by creating a different search for each
-        if self.multiple_types_as_one
-          self << self.new_search_for_types_and_locale(klass, self.types, locale)
-        else
-          self.types.each do |type|
-            self << self.new_search_for_type_and_locale(klass, type, locale)
-          end
-        end
+        self.add_search(klass, locale)
+        #if we hit a search that tells us to redirect, do not continue
+        break if self.redirect_url
       end
       self.compact!
       self
+    end
+
+    def add_search(klass, locale)
+      # 4. Handle all type modifiers, by creating a different search for each
+      if self.multiple_types_as_one
+        new_search = self.new_search_for_types_and_locale(klass, self.types, locale)
+        self.redirect_url = new_search.redirect_url
+        self << new_search
+      else
+        self.types.each do |typ|
+          new_search = self.new_search_for_type_and_locale(klass, typ, locale)
+          self.redirect_url = new_search.redirect_url
+          self << new_search
+        end
+      end
     end
 
     # single type
