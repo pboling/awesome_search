@@ -23,6 +23,8 @@ module Awesome
     #TODO: Put these into a config block
     cattr_accessor :verbose
     cattr_accessor :check_inception
+    cattr_accessor :protect_types
+    cattr_accessor :protect_filters
 
     attr_accessor(:search_text,
                   :search_query,

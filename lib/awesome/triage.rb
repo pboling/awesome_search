@@ -72,9 +72,9 @@ module Awesome
       new_search = nil
       type = self.class.make_symring(type)
       # 6. If there is a type modifier, then make sure it matches the type being searched or return nil
-      type_mods = klass.valid_type_modifiers(self.text, type, false)
-      puts "type_mods is empty" if Awesome::Triage.verbose && type_mods.empty?
-      unless type_mods.empty?
+      valid_type_mods = Awesome::Search.protect_types ? klass.valid_type_modifiers(self.text, type, false) : [type]
+      puts "valid_type_mods is empty" if Awesome::Triage.verbose && valid_type_mods.empty?
+      unless valid_type_mods.empty?
         new_search = klass.new({:search_text => self.text, :search_type => type, :search_locale => locale, :search_filters => self.filter_mods(klass)})
         new_search.get_results
       end
@@ -85,10 +85,10 @@ module Awesome
     def new_search_for_types_and_locale(klass, types, locale)
       new_search = nil
       # 6. If there is a type modifier, then make sure it matches the type being searched or return nil
-      type_mods = klass.valid_type_modifiers(self.text, types, true)
-      puts "type_mods is empty" if Awesome::Triage.verbose && type_mods.empty?
-      unless type_mods.empty?
-        new_search = klass.new({:search_text => self.text, :search_type => type_mods, :search_locale => locale, :search_filters => self.filter_mods(klass)})
+      valid_type_mods = Awesome::Search.protect_types ? klass.valid_type_modifiers(self.text, types, true) : types
+      puts "valid_type_mods is empty" if Awesome::Triage.verbose && valid_type_mods.empty?
+      unless valid_type_mods.empty?
+        new_search = klass.new({:search_text => self.text, :search_type => valid_type_mods, :search_locale => locale, :search_filters => self.filter_mods(klass)})
         new_search.get_results
       end
       return new_search
@@ -98,7 +98,7 @@ module Awesome
       f = nil
       if self.filters
         # 5. If there is a filter modifier, then make sure it matches the locale being searched or return nil
-        f = klass.valid_filter_modifiers(self.text, self.filters)
+        f = Awesome::Search.protect_filters ? klass.valid_filter_modifiers(self.text, self.filters) : self.filters
         puts "filter_mods is empty" if Awesome::Triage.verbose && filter_mods.empty?
       end
       f

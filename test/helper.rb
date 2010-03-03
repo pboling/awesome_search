@@ -12,6 +12,8 @@ require "test/search_classes/google"
 require "test/search_classes/local"
 
 class Test::Unit::TestCase
+  Awesome::Search.protect_types = true
+  Awesome::Search.protect_filters = true
   Awesome::Search.verbose = false
   Awesome::Search.verbose_types = false
   Awesome::Search.verbose_filters = false
