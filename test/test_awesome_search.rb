@@ -1,9 +1,10 @@
-require 'helper'
+require 'test/helper'
 
 class TestAwesomeSearch < Test::Unit::TestCase
-  context "An AwesomeSearch instance" do
+
+  context "An Awesome::Search instance" do
     setup do
-      @awesome = AwesomeSearch.new({:search_text => "this is a test", :search_type => :isbn, :search_locale => :amazon})
+      @awesome = Awesome::Search.new({:search_text => "this is a test", :search_type => :isbn, :search_locale => :amazon})
     end
 
     should "return search_query" do
@@ -17,9 +18,9 @@ class TestAwesomeSearch < Test::Unit::TestCase
     end
   end
 
-  context "An AwesomeSearch instance with query modifiers" do
+  context "An Awesome::Search instance with query modifiers" do
     setup do
-      @awesome = AwesomeSearch.new({:search_text => ":ebay :sku this is a test"})
+      @awesome = Awesome::Search.new({:search_text => ":ebay :sku this is a test"})
     end
 
     should "return search_query without query modifiers" do
@@ -33,26 +34,33 @@ class TestAwesomeSearch < Test::Unit::TestCase
     end
   end
 
-  context "#results_for_type_and_locale with invalid params" do
+  context "#results_for with invalid params" do
     setup do
-      @invalid_search = AwesomeSearch.results_for_type_and_locale(":local :text this is a test", ":upc", ":ebay")
+      @invalid_search = Awesome::Search.results_for(":local :text this is a test", ":upc", ":ebay")
     end
 
     should "invalid search should return nil" do
-      assert @invalid_search.nil?
+      assert @invalid_search.empty?
     end
   end
 
-  context "#results_for_type_and_locale with valid params" do
+  context "#results_for with valid params" do
     setup do
-      @search = AwesomeSearch.results_for_type_and_locale(":local :amazon :text :isbn this is a test", ":text", ":local")
+      @searches = Awesome::Search.results_for(":local :amazon :text :isbn this is a test", ":text", ":local")
     end
 
-    should "valid search should not return nil results" do
-      assert !@search.results.nil?
+    should "should return an array" do
+      assert @searches.is_a?(Array)
+    end
+
+    should "for a single type, get a single result set" do
+      assert @searches.length == 1
+    end
+    should "for a single type result set has results" do
+      assert !@searches.first.results.nil?
     end
     should "valid search should return integer count" do
-      assert @search.count.is_a?(Integer)
+      assert @searches.first.count.is_a?(Integer)
     end
   end
 end

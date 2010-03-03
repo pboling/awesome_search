@@ -11,7 +11,8 @@ See tests.
 
 == Configuration
 
-These are the defaults, and may be configured separately for each search class you create.
+These are the setting used by the test suite.  Configure separately for each search class you create,
+or all at once for AwesomeSearch.
 
   AwesomeSearch.configure_search_locales do |config|
     config[:search_locales_to_classes] =

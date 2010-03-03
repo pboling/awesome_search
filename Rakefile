@@ -12,6 +12,31 @@ begin
     gem.authors = ["pboling"]
     gem.add_development_dependency "shoulda", ">= 0"
     gem.add_runtime_dependency "activesupport", ">= 2.1"
+    gem.files = [
+     ".gitignore",
+     "LICENSE",
+     "README.rdoc",
+     "Rakefile",
+     "VERSION",
+     "awesome_search.gemspec",
+     "init.rb",
+     "lib/awesome_search.rb",
+     "lib/awesome/search.rb",
+     "lib/awesome/super_search.rb",
+     "lib/awesome/triage.rb",
+     "lib/awesome/definitions/bits.rb",
+     "lib/awesome/definitions/filters.rb",
+     "lib/awesome/definitions/locales.rb",
+     "lib/awesome/definitions/types.rb",
+     "rails/init.rb",
+     "test/helper.rb",
+     "test/test_awesome_search.rb",
+     "test/test_multiple.rb",
+     "test/search_classes/search_amazon.rb",
+     "test/search_classes/search_ebay.rb",
+     "test/search_classes/search_google.rb",
+     "test/search_classes/search_local.rb"
+  ]
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

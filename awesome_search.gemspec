@@ -17,8 +17,7 @@ Gem::Specification.new do |s|
      "README.rdoc"
   ]
   s.files = [
-    ".document",
-     ".gitignore",
+    ".gitignore",
      "LICENSE",
      "README.rdoc",
      "Rakefile",
@@ -26,14 +25,6 @@ Gem::Specification.new do |s|
      "awesome_search.gemspec",
      "init.rb",
      "lib/awesome_search.rb",
-     "lib/awesome_search/search_amazon.rb",
-     "lib/awesome_search/search_ebay.rb",
-     "lib/awesome_search/search_google.rb",
-     "lib/awesome_search/search_local.rb",
-     "lib/awesome_search/super_search.rb",
-     "lib/search_definitions/bits.rb",
-     "lib/search_definitions/locales.rb",
-     "lib/search_definitions/types.rb",
      "rails/init.rb",
      "test/helper.rb",
      "test/test_awesome_search.rb"
@@ -45,7 +36,12 @@ Gem::Specification.new do |s|
   s.summary = %q{Organize complicated search results}
   s.test_files = [
     "test/helper.rb",
-     "test/test_awesome_search.rb"
+     "test/search_classes/amazon.rb",
+     "test/search_classes/ebay.rb",
+     "test/search_classes/google.rb",
+     "test/search_classes/local.rb",
+     "test/test_awesome_search.rb",
+     "test/test_multiple_types.rb"
   ]
 
   if s.respond_to? :specification_version then
