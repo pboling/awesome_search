@@ -31,6 +31,7 @@ module Awesome
                   :search_locale,
                   :found,
                   :tally,
+                  :success,
                   :endpoint,
                   :invalid_inception,
                   :redirect_url)
@@ -43,8 +44,9 @@ module Awesome
       @search_query =   self.clean_search_text      # a string to be set based on the search text by removing the search modifiers from the search text
       @search_type =    args.first[:search_type]    # a symring (symring methods are in the Bits mixin)
       @search_locale =  args.first[:search_locale]  # a symring (symring methods are in the Bits mixin)
-      @tally = nil
       @found = nil
+      @tally = nil
+      @success = true
       @redirect_url = nil
       if self.class.check_inception && !self.valid_search_type_inception?
         puts "search type inception is invalid (no type regex matches query string)" if Awesome::Search.verbose
