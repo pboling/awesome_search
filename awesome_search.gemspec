@@ -17,8 +17,7 @@ Gem::Specification.new do |s|
      "README.rdoc"
   ]
   s.files = [
-    ".gitignore",
-     "LICENSE",
+    "LICENSE",
      "README.rdoc",
      "Rakefile",
      "VERSION",
@@ -32,10 +31,7 @@ Gem::Specification.new do |s|
      "lib/awesome/super_search.rb",
      "lib/awesome/triage.rb",
      "lib/awesome_search.rb",
-     "rails/init.rb",
-     "test/helper.rb",
-     "test/test_awesome_search.rb",
-     "test/test_multiple.rb"
+     "rails/init.rb"
   ]
   s.homepage = %q{http://github.com/pboling/awesome_search}
   s.rdoc_options = ["--charset=UTF-8"]

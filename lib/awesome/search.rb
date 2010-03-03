@@ -36,11 +36,15 @@ module Awesome
                   :success,
                   :endpoint,
                   :invalid_inception,
-                  :redirect_url)
+                  :redirect_url,
+                  :page,
+                  :per_page)
 
     #CLASS METHODS
     #Main focus of class methods is determining which sort of AwesomeSearch subclass we need to instantiate for the search
     def initialize(*args)
+      @page     = args.first[:page]
+      @per_page = args.first[:per_page]
       @search_text =    args.first[:search_text]    # a string
       @search_filters =  args.first[:search_filters]  # a ruby object (string, array, hash) to be used by subclasss search classes as a filter
       @search_query =   self.clean_search_text      # a string to be set based on the search text by removing the search modifiers from the search text
@@ -68,11 +72,11 @@ module Awesome
 
     # Main method used by the app to search
     # Instantiates an Awesome::Triage which will handle setting up the search
-    def self.results_for(anytext, types, locales, filters = nil, multiple_types_as_one = false)
+    def self.results_for(anytext, types, locales, filters = nil, multiple_types_as_one = false, page = nil, per_page = nil)
       # 1. if the search is blank return nil
       puts "anytext is blank" if Awesome::Search.verbose && anytext.blank?
       return nil if anytext.blank?
-      Triage.new(:text => anytext, :types => types, :locales => locales, :filters => filters, :multiple_types_as_one => multiple_types_as_one)
+      Triage.new(:text => anytext, :types => types, :locales => locales, :filters => filters, :multiple_types_as_one => multiple_types_as_one, :page => page, :per_page => per_page)
     end
 
     #INSTANCE METHODS
