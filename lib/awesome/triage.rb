@@ -65,7 +65,6 @@ module Awesome
       unless type_mods.empty?
         new_search = klass.new({:search_text => self.text, :search_type => type, :search_locale => locale, :search_filters => self.filter_mods(klass)})
         new_search.get_results
-        new_search.count = new_search.results.length
       end
       return new_search
     end
@@ -79,7 +78,6 @@ module Awesome
       unless type_mods.empty?
         new_search = klass.new({:search_text => self.text, :search_type => type_mods, :search_locale => locale, :search_filters => self.filter_mods(klass)})
         new_search.get_results
-        new_search.count = new_search.results.length
       end
       return new_search
     end

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["pboling"]
-  s.date = %q{2010-03-02}
+  s.date = %q{2010-03-03}
   s.description = %q{Organize complicated search results}
   s.email = %q{peter.boling@peterboling.com}
   s.extra_rdoc_files = [
@@ -24,10 +24,18 @@ Gem::Specification.new do |s|
      "VERSION",
      "awesome_search.gemspec",
      "init.rb",
+     "lib/awesome/definitions/bits.rb",
+     "lib/awesome/definitions/filters.rb",
+     "lib/awesome/definitions/locales.rb",
+     "lib/awesome/definitions/types.rb",
+     "lib/awesome/search.rb",
+     "lib/awesome/super_search.rb",
+     "lib/awesome/triage.rb",
      "lib/awesome_search.rb",
      "rails/init.rb",
      "test/helper.rb",
-     "test/test_awesome_search.rb"
+     "test/test_awesome_search.rb",
+     "test/test_multiple.rb"
   ]
   s.homepage = %q{http://github.com/pboling/awesome_search}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -41,6 +49,9 @@ Gem::Specification.new do |s|
      "test/search_classes/google.rb",
      "test/search_classes/local.rb",
      "test/test_awesome_search.rb",
+     "test/test_multiple.rb",
+     "test/test_multiple_filters.rb",
+     "test/test_multiple_locales.rb",
      "test/test_multiple_types.rb"
   ]
 

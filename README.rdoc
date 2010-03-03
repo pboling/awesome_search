@@ -96,8 +96,10 @@ or all at once for AwesomeSearch.
   #3. always return nil unless super, as super's get_results will ensure the search is valid
       return nil unless super
   #4. Here is where you would do actual searching.  Write other methods and call them if need be or call methods in other classes, etc.
-  # You need to set the variable that will contain the search results, results. results is set to [] in the super, so you can iterate and do << with it.
-      self.results = Model.find(stuff) if stuff
+      # You need to set the attribute 'found' to contain the search result(s).
+      # found is set to [] in the super, so you can iterate and do << with it,
+      # or set it to whatever you need it to be
+      self.found = Model.find(stuff) if stuff
       nil
     end
   end

@@ -57,7 +57,7 @@ class TestAwesomeSearch < Test::Unit::TestCase
       assert @searches.length == 1
     end
     should "for a single type result set has results" do
-      assert !@searches.first.results.nil?
+      assert !@searches.first.found.nil?
     end
     should "valid search should return integer count" do
       assert @searches.first.count.is_a?(Integer)

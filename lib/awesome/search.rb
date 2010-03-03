@@ -29,10 +29,11 @@ module Awesome
                   :search_type,
                   :search_filters,
                   :search_locale,
-                  :results,
+                  :found,
                   :count,
                   :endpoint,
-                  :invalid_inception)
+                  :invalid_inception,
+                  :redirect_url)
 
     #CLASS METHODS
     #Main focus of class methods is determining which sort of AwesomeSearch subclass we need to instantiate for the search
@@ -42,8 +43,9 @@ module Awesome
       @search_query =   self.clean_search_text      # a string to be set based on the search text by removing the search modifiers from the search text
       @search_type =    args.first[:search_type]    # a symring (symring methods are in the Bits mixin)
       @search_locale =  args.first[:search_locale]  # a symring (symring methods are in the Bits mixin)
-      @count =   nil
-      @results = nil
+      @count = nil
+      @found = nil
+      @redirect_url = nil
       if self.class.check_inception && !self.valid_search_type_inception?
         puts "search type inception is invalid (no type regex matches query string)" if Awesome::Search.verbose
         @invalid_inception = true

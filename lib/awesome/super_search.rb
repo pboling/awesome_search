@@ -8,7 +8,7 @@ module Awesome
       # count and results are set to nil in the main initializer
       # so that we can differentiate between searches that aborted
       # and searches that completed but had no results.
-      self.results = []
+      self.found = []
       self.count = 0
       return true
     end

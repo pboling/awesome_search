@@ -14,7 +14,7 @@ class TestMultipleLocales < Test::Unit::TestCase
       assert @searches.length == 2
     end
     should "all have results" do
-      assert @searches.select {|x| !x.results.nil?}.length == 2
+      assert @searches.select {|x| x.found.is_a?(Array)}.length == 2
     end
     should "all have count" do
       assert @searches.select {|x| x.count.is_a?(Integer)}.length == 2
