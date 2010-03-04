@@ -17,6 +17,7 @@ module Awesome
         end
 
         def array_to_middle_regex(arr, whitespace = false)
+          return '' if arr.empty?
           whitespace ? '\s?' + arr.join('\s?|\s?') + '\s?' :
                   arr.join('|')
         end
