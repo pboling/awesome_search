@@ -8,7 +8,8 @@ module Awesome
     #The following is set in a config block
     @@search_locales ||= {:search_locales_to_classes => {},
                           :search_locales_to_locale_modifiers => {},
-                          :locale_modifiers_to_search_locales => {}}
+                          :locale_modifiers_to_search_locales => {},
+                          :search_locales_to_stopwords => {}}
 
     def self.configure_search_locales(&block)
       yield @@search_locales
@@ -28,13 +29,13 @@ module Awesome
 
     def initialize(*args)
       super()
+      @multiple_types_as_one = !args.first[:multiple_types_as_one].nil? ? args.first[:multiple_types_as_one] : false# Boolean: should the array of types be sent through to a single search, or iterated over to separate searches like locales?
       @page     = args.first[:page]
       @per_page = args.first[:per_page]
       @text     = args.first[:text]     # a string
       @types    = args.first[:types].respond_to?(:each) ? args.first[:types] : [args.first[:types]]       # a symring, or array thereof (symring methods are in the Bits mixin)
       @locales  = args.first[:locales].respond_to?(:each) ? args.first[:locales] : [args.first[:locales]] # a symring, or array thereof (symring methods are in the Bits mixin)
       @filters  = args.first[:filters] # a ruby object (string, array, hash) to be used by subclasss search classes as a filter
-      @multiple_types_as_one = args.first[:multiple_types_as_one] || false# Boolean: should the array of types be sent through to a single search, or iterated over to separate searches like locales?
       @redirect_url = nil
       # 1. Handle all locale modifiers, by creating a different search for each
       self.locales.each do |locale|
@@ -48,7 +49,7 @@ module Awesome
         locale_mods = self.class.valid_locale_modifiers(self.text, locale)
         puts "locale_mods is empty" if Awesome::Triage.verbose && locale_mods.empty?
         next if locale_mods.empty?
-        self.add_search(klass, locale)
+        self.add_search(klass, locale, self.class.stopwords_for_locale(locale))
         #if we hit a search that tells us to redirect, do not continue
         break if self.redirect_url
       end
@@ -56,15 +57,15 @@ module Awesome
       self
     end
 
-    def add_search(klass, locale)
+    def add_search(klass, locale, stopwords)
       # 4. Handle all type modifiers, by creating a different search for each
       if self.multiple_types_as_one
-        new_search = self.new_search_for_types_and_locale(klass, self.types, locale)
+        new_search = self.new_search_for_types_and_locale(klass, self.types, locale, stopwords)
         self.redirect_url = new_search.redirect_url
         self << new_search
       else
         self.types.each do |typ|
-          new_search = self.new_search_for_type_and_locale(klass, typ, locale)
+          new_search = self.new_search_for_type_and_locale(klass, typ, locale, stopwords)
           self.redirect_url = new_search.redirect_url
           self << new_search
         end
@@ -72,27 +73,27 @@ module Awesome
     end
 
     # single type
-    def new_search_for_type_and_locale(klass, type, locale)
+    def new_search_for_type_and_locale(klass, type, locale, stopwords)
       new_search = nil
       type = self.class.make_symring(type)
       # 6. If there is a type modifier, then make sure it matches the type being searched or return nil
-      valid_type_mods = Awesome::Search.protect_types ? klass.valid_type_modifiers(self.text, type, false) : [type]
+      valid_type_mods = Awesome::Search.protect_types ? klass.valid_type_modifiers(self.text, type, self.multiple_types_as_one) : [type]
       puts "valid_type_mods is empty" if Awesome::Triage.verbose && valid_type_mods.empty?
       unless valid_type_mods.empty?
-        new_search = klass.new({:search_text => self.text, :search_type => type, :search_locale => locale, :search_filters => self.filter_mods(klass), :page => self.page, :per_page => self.per_page})
+        new_search = klass.new({:stopwords => stopwords, :multiple_types_as_one => self.multiple_types_as_one, :search_text => self.text, :search_type => type, :search_locale => locale, :search_filters => self.filter_mods(klass), :page => self.page, :per_page => self.per_page})
         new_search.get_results
       end
       return new_search
     end
 
     # multiple types
-    def new_search_for_types_and_locale(klass, types, locale)
+    def new_search_for_types_and_locale(klass, types, locale, stopwords)
       new_search = nil
       # 6. If there is a type modifier, then make sure it matches the type being searched or return nil
-      valid_type_mods = Awesome::Search.protect_types ? klass.valid_type_modifiers(self.text, types, true) : types
+      valid_type_mods = klass.protect_types ? klass.valid_type_modifiers(self.text, types, self.multiple_types_as_one) : types
       puts "valid_type_mods is empty" if Awesome::Triage.verbose && valid_type_mods.empty?
       unless valid_type_mods.empty?
-        new_search = klass.new({:search_text => self.text, :search_type => valid_type_mods, :search_locale => locale, :search_filters => self.filter_mods(klass), :page => self.page, :per_page => self.per_page})
+        new_search = klass.new({:stopwords => stopwords, :multiple_types_as_one => self.multiple_types_as_one, :search_text => self.text, :search_type => valid_type_mods, :search_locale => locale, :search_filters => self.filter_mods(klass), :page => self.page, :per_page => self.per_page})
         new_search.get_results
       end
       return new_search
@@ -110,7 +111,7 @@ module Awesome
 
     def clean_search_text
       txt = Awesome::Triage.clean_search_text(self.search_text)
-      Awesome::Search.clean_search_text(txt)
+      Awesome::Search.clean_search_text(txt, self.multiple_types_as_one)
     end
 
     def self.clean_search_text(text)

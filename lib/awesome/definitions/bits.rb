@@ -18,8 +18,10 @@ module Awesome
 
         def array_to_middle_regex(arr, whitespace = false)
           return '' if arr.empty?
-          whitespace ? '\s?' + arr.join('\s?|\s?') + '\s?' :
-                  arr.join('|')
+          arr = whitespace ?
+            arr.map {|x| '(\s*' + x + '\s*)'} :
+            arr.map {|x| '(' + x + ')'}
+          arr.join('|')
         end
 
         def modifier_regex(middle)

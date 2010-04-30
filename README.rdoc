@@ -11,7 +11,7 @@ See tests.
 
 == Configuration
 
-These are the setting used by the test suite.  Configure separately for each search class you create,
+These are the settings used by the test suite.  Configure separately for each search class you create,
 or all at once for AwesomeSearch.
 
   AwesomeSearch.configure_search_locales do |config|
@@ -90,10 +90,10 @@ or all at once for AwesomeSearch.
   Create subclasses like this:
 
   #1. inherit from SuperSearch (which inherits from AwesomeSearch)
-  class SearchAmazon < SuperSearch
+    class SearchAmazon < SuperSearch
   #2. Define a method called get_results
     def get_results
-  #3. always return nil unless super, as super's get_results will ensure the search is valid
+  #3. Always return nil unless super, as super's get_results will ensure the search is valid
       return nil unless super
   #4. Here is where you would do actual searching.  Write other methods and call them if need be or call methods in other classes, etc.
       # You need to set the attribute 'found' to contain the search result(s).
@@ -117,4 +117,4 @@ or all at once for AwesomeSearch.
 
 == Copyright
 
-  Copyright (c) 2008-9 Peter H. Boling, released under the MIT license. See LICENSE for details.
+  Copyright (c) 2008-10 Peter H. Boling, released under the MIT license. See LICENSE for details.

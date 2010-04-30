@@ -10,6 +10,10 @@ module Awesome
 
       module ClassMethods
 
+        def stopwords_for_locale(locale)
+          self.search_locales[:search_locales_to_stopwords][locale]
+        end
+
         def search_locales_enabled
           self.search_locale_keys(false)
         end
@@ -34,23 +38,27 @@ module Awesome
           return false unless self.search_locale_keys.include?(locale)
           mods = self.get_locale_modifiers(anytext, locale)
           valid_mods = mods.select do |mod|
-            puts "locale mod #{mod.inspect} => #{self.search_locales[:locale_modifiers_to_search_locales][mod]} == #{locale.inspect}" if self.verbose_locales
-            self.symring_equalizer(self.search_locales[:locale_modifiers_to_search_locales][mod], locale)
+            puts "locale mod #{mod.inspect} => #{self.get_search_locale_from_modifier(mod)} == #{locale.inspect}" if self.verbose_locales
+            self.symring_equalizer(self.get_search_locale_from_modifier(mod), locale)
           end
           puts "valid_locale_modifiers: #{valid_mods.inspect}" if self.verbose_locales
           return valid_mods
         end
 
-        def get_locale_modifiers(anytext, locale)
+        def get_locale_modifiers(anytext, locale = nil)
           mods = anytext.scan(self.search_locale_modifiers_regex(false)).flatten.compact
           #If no locale mods are in the search string then the locale requested is valid so we pretend it was requested as a modifier
-          mods = mods.empty? ? [self.make_symring(locale)] : mods
-          puts "get_locale_modifiers: #{mods.inspect}" if self.verbose_locales
-          mods
+          mods = !locale.blank? && mods.empty? ? [self.make_symring(locale)] : mods
+          puts "get_locale_modifiers: #{mods.reject {|x| x == ''}.inspect}" if self.verbose_locales
+          mods.reject {|x| x == ''}
+        end
+
+        def get_search_locale_from_modifier(mod)
+          self.search_locales[:locale_modifiers_to_search_locales][mod]
         end
 
         def search_locale_modifiers_regex(whitespace = false)
-          return self.modifier_regex_from_array(self.search_locale_modifiers, whitespace)
+          self.modifier_regex_from_array(self.search_locale_modifiers, whitespace)
         end
       end # end of ClassMethods
 

@@ -47,16 +47,21 @@ module Awesome
           return valid_search_filters
         end
 
-        def get_filter_modifiers(anytext, allowed)
+        def get_filter_modifiers(anytext, filter = nil)
           mods = anytext.scan(self.search_filter_modifiers_regex(false)).flatten.compact
           #If no filter mods are in the search string then the filter requested is valid so we pretend it was requested as a modifier
-          mods = (self.search_filter_modifiers & mods) | allowed
-          puts "get_filter_modifiers #{mods.inspect}" if self.verbose_filters
-          mods
+          mods = !filter.blank? && mods.empty? ? [self.make_symring(filter)] : mods
+          #mods = (self.search_filter_modifiers & mods) | filter
+          puts "get_filter_modifiers #{mods.reject {|x| x == ''}.inspect}" if self.verbose_filters
+          mods.reject {|x| x == ''}
+        end
+
+        def get_search_filter_from_modifier(mod)
+          self.search_filters[:filter_modifiers_to_search_filters][mod]
         end
 
         def search_filter_modifiers_regex(whitespace = false)
-          return self.modifier_regex_from_array(self.search_filter_modifiers, whitespace)
+          self.modifier_regex_from_array(self.search_filter_modifiers, whitespace)
         end
       end # end of ClassMethods
 
