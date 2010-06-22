@@ -15,6 +15,7 @@ module Awesome
 
     #Some defaults if stopwords are set to be used (by default they are turned off)
     @@search_stopwords ||= {:standard => %w(an and are as at be but by for if in into is it no not of on or s such t that the their then there these they this to was will with),
+                            :none => [],
                             :custom => []}
 
     def self.configure_search_types(&block)
@@ -37,6 +38,7 @@ module Awesome
 
     attr_accessor(:search_text,
                   :search_query,
+                  :clean_search_query,
                   :search_type,
                   :search_filters,
                   :search_locale,
@@ -61,19 +63,22 @@ module Awesome
                   :search_tokens,
                   :highlight_tokens)
 
+    alias :query :search_text
+    alias :processed_query :search_query
+    
     #CLASS METHODS
     #Main focus of class methods is determining which sort of AwesomeSearch subclass we need to instantiate for the search
     def initialize(*args)
       @multiple_types_as_one = args.first[:multiple_types_as_one]
-      @stopwords =  args.first[:stopwords] ?
+      @stopwords =  !args.first[:stopwords].blank? ?
                       args.first[:stopwords].is_a?(Array) ?
                         args.first[:stopwords] :
                         args.first[:stopwords].is_a?(Symbol) ?
                           self.class.stopwords(args.first[:stopwords]) :
                           self.class.stopwords(:both) :
-                      args.first[:stopwords] != false ?
+                      args.first[:stopwords] == true ?
                         self.class.stopwords(:standard) :
-                        []
+                        self.class.stopwords(:none)
       @page     = args.first[:page]
       @per_page = args.first[:per_page]
       @search_text =    args.first[:search_text]    # a string
@@ -82,6 +87,7 @@ module Awesome
       @search_tokens =  args.first[:search_tokens]  # an array of the query terms as tokens after being cleaned, unless passed in as param (not sure why this would ever be desired, but why not allow it jic?) When not set in args, will be set by clean_search_text methods
       @highlight_tokens =  args.first[:highlight_tokens]  # an array of the query terms as unquoted tokens after being cleaned, unless passed in as param (not sure why this would ever be desired, but why not allow it jic?) When not set in args, will be set by clean_search_text methods
       @search_query =   self.clean_search_text      # a string to be set based on the search text by removing the search modifiers from the search text
+      @clean_search_query = self.set_clean_search_query # Removed search tokens and modifiers (+) so Regexes can be run on this string
       @search_type =    args.first[:search_type]    # a symring (symring methods are in the Bits mixin)
       @search_locale =  args.first[:search_locale]  # a symring (symring methods are in the Bits mixin)
       @found = nil
@@ -104,9 +110,13 @@ module Awesome
     end
 
     def clean_search_text
+      #puts "search_text: #{self.search_text}" if Awesome::Search.verbose
       txt = Awesome::Triage.clean_search_text(self.search_text)
+      #puts "cleaning1: #{txt}" if Awesome::Search.verbose
       txt = Awesome::Search.clean_search_text(txt, self.multiple_types_as_one)
+      #puts "cleaning2: #{txt}" if Awesome::Search.verbose
       txt = self.process_stopwords(txt)
+      #puts "cleaning3: #{txt}" if Awesome::Search.verbose
       txt
     end
 

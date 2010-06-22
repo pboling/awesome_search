@@ -12,7 +12,8 @@ require "test/search_classes/google"
 require "test/search_classes/local"
 
 class Test::Unit::TestCase
-  Awesome::Search.protect_types = true
+  #protect_types is a work in progress, doesn't work now.
+  Awesome::Search.protect_types = false
   Awesome::Search.protect_filters = true
   Awesome::Search.verbose = false
   Awesome::Search.verbose_types = false
@@ -100,7 +101,7 @@ class Test::Unit::TestCase
           [ ":all",
             ":every" ],
         ":spotted" =>
-          [ "spotted" ],
+          [ ":spotted" ],
         ":old" =>
           [ ":old",
             ":ancient",

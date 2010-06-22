@@ -7,8 +7,14 @@ class TestAwesomeSearch < Test::Unit::TestCase
       @awesome = Awesome::Search.new({:search_text => "this is a test", :search_type => :isbn, :search_locale => :amazon})
     end
 
+    should "return search_text" do
+      assert_equal 'this is a test', @awesome.search_text
+    end
     should "return search_query" do
-      assert_equal 'this is a test', @awesome.search_query
+      assert_equal 'this test is a', @awesome.search_query
+    end
+    should "return clean_search_query" do
+      assert_equal 'this test is a', @awesome.clean_search_query
     end
     should "return search_type" do
       assert_equal :isbn, @awesome.search_type
@@ -20,11 +26,14 @@ class TestAwesomeSearch < Test::Unit::TestCase
 
   context "An Awesome::Search instance with query modifiers" do
     setup do
-      @awesome = Awesome::Search.new({:search_text => ":ebay :sku this is a test"})
+      @awesome = Awesome::Search.new({:search_text => ":ebay :sku this is a +test"})
     end
 
-    should "return search_query without query modifiers" do
-      assert_equal 'this is a test', @awesome.search_query
+    should "return search_query without query tokens" do
+      assert_equal '+test this is a', @awesome.search_query
+    end
+    should "return clean_search_query without query tokens and modifiers" do
+      assert_equal 'test this is a', @awesome.clean_search_query
     end
     should "search_type should be nil" do
       assert_equal nil, @awesome.search_type

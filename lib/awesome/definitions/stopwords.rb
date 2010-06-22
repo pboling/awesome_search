@@ -17,8 +17,10 @@ module Awesome
       end
 
       module ClassMethods
-        def stopwords(key = :both)
+        def stopwords(key = :none)
           case key
+            when :none then
+              self.search_stopwords[:none]
             when :standard then
               self.search_stopwords[:standard]
             when :custom then
@@ -53,6 +55,10 @@ module Awesome
           array = (self.unquoted_exact_phrases_array(txt) | self.gowords_array(txt)).sort {|a,b| b.length <=> a.length }
           remove_exclusions(array)
         end
+      end
+
+      def set_clean_search_query
+        self.clean_search_query = self.highlight_tokens.join(" ")
       end
 
       def remove_exclusions(array)

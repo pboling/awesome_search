@@ -4,7 +4,7 @@ class TestMultipleFilters < Test::Unit::TestCase
 
   context "#results_for with multiple filters" do
     setup do
-      @searches = Awesome::Search.results_for(":local :amazon :text :isbn :old this is a test 1234567890", ":text", ":local", [":old",":spotted",":shiny",":new"])
+      @searches = Awesome::Search.results_for(":local :amazon :text :isbn :old :spotted :new this is a test 1234567890", ":text", ":local", [":old",":spotted",":shiny",":new"])
     end
     should "should return an array" do
       assert @searches.is_a?(Array)

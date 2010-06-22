@@ -2,7 +2,6 @@
 
 * A helpful library to make searching more organized in the controller and views.
 * Using this library will force you to write a class for each kind of search you want to use.
-* It has features that allow easy configuration of searches tailored to work with rsolr.
 
 == Usage
 
