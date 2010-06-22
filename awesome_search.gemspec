@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{awesome_search}
-  s.version = "0.0.0"
+  s.version = "1.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["pboling"]
-  s.date = %q{2010-03-03}
+  s.date = %q{2010-06-22}
   s.description = %q{Organize complicated search results}
   s.email = %q{peter.boling@peterboling.com}
   s.extra_rdoc_files = [
@@ -26,17 +26,28 @@ Gem::Specification.new do |s|
      "lib/awesome/definitions/bits.rb",
      "lib/awesome/definitions/filters.rb",
      "lib/awesome/definitions/locales.rb",
+     "lib/awesome/definitions/stopwords.rb",
      "lib/awesome/definitions/types.rb",
      "lib/awesome/search.rb",
      "lib/awesome/super_search.rb",
      "lib/awesome/triage.rb",
      "lib/awesome_search.rb",
-     "rails/init.rb"
+     "rails/init.rb",
+     "test/helper.rb",
+     "test/search_classes/amazon.rb",
+     "test/search_classes/ebay.rb",
+     "test/search_classes/google.rb",
+     "test/search_classes/local.rb",
+     "test/test_awesome_search.rb",
+     "test/test_multiple.rb",
+     "test/test_multiple_filters.rb",
+     "test/test_multiple_locales.rb",
+     "test/test_multiple_types.rb"
   ]
   s.homepage = %q{http://github.com/pboling/awesome_search}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.7}
   s.summary = %q{Organize complicated search results}
   s.test_files = [
     "test/helper.rb",
@@ -55,7 +66,7 @@ Gem::Specification.new do |s|
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_runtime_dependency(%q<activesupport>, [">= 2.1"])
     else
